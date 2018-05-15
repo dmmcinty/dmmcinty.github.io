@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import ChangelogList from './changelog_list';
 
 export default class App extends Component {
   render() {
     return (
-      <div>React simple starter</div>
+      <div><ChangelogList /></div>
+      
     );
   }
 }
