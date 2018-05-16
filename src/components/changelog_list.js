@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import AuthForm from './auth_form';
 import RepoSelect from './repo_select';
 import BranchSelect from './branch_select';
+import CategorySelect from './category_select';
 import _ from 'lodash';
 
 class ChangelogList extends Component {
@@ -10,15 +11,20 @@ class ChangelogList extends Component {
 		return _.map(this.props.logs.data, log => {
 			const logItem = `- [#${log.number}](${log.html_url}) ${log.title}.`;
 			return (
-				<li className="list-group-item" key={log.id}>
-					<a href={log.html_url} target="_blank">{logItem}</a>
-				</li>
+				<tr key={log.id}>
+					<td>
+						<a href={log.html_url} target="_blank">{logItem}</a>
+					</td>
+					<td>
+						<CategorySelect onChange={console.log('woop')}/>
+					</td>
+				</tr>
 			)
 		});
 	}
 
 	checkAuth() {
-		if(typeof this.props.auth == 'object') {
+		if(!this.props.auth) {
 			return <AuthForm />;
 		} else return (
 			<div>
@@ -33,9 +39,21 @@ class ChangelogList extends Component {
 			<div>
 				<h3>List o' Logs</h3>
 				{this.checkAuth()}
-				<ul className="list-group">
-					{this.renderLogs()}
-				</ul>
+				<table className="table">
+					<thead>
+						<tr>
+							<th scope="col">
+								Merged PRs
+							</th>
+							<th scope="col">
+								Category
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{this.renderLogs()}
+					</tbody>
+				</table>
 			</div>
 		)
 	}

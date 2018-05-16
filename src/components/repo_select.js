@@ -6,26 +6,27 @@ import _ from 'lodash';
 
 class RepoSelect extends Component {
 	componentDidMount() {
-		if(typeof this.props.auth != 'object') {
-			this.props.fetchRepos(this.props.auth);
-		}
+			this.props.fetchRepos();
 	}
 
 	renderOptions() {
-		return _.map(this.props.repos, repo => {
-			return (
-				<option 
-					value={repo.name} 
-					key={repo.id}>
-						{repo.name}
-				</option>
-			);
-		});
+		if (typeof this.props.repos != 'string') {
+			const options = this.props.repos;
+			return _.map(options, repo => {
+				return (
+					<option 
+						value={repo.name} 
+						key={repo.id}>
+							{repo.name}
+					</option>
+				);
+			});
+		}
 	}
 
 	onSubmit(value) {
 		this.props.selectRepo(value.repo);
-		this.props.fetchBranches(this.props.auth, value.repo);
+		this.props.fetchBranches(value.repo);
 	}
 
 	render() {
@@ -61,8 +62,7 @@ function validate(values) {
 
 function mapStateToProps(state) {
 	return {
-		repos: state.repos,
-		auth: state.auth
+		repos: state.repos
 	}
 }
 

@@ -19,7 +19,7 @@ class BranchSelect extends Component {
 	}
 
 	onSubmit(value) {
-		this.props.fetchLogs(this.props.auth, this.props.repos, value.branch);
+		this.props.fetchLogs(this.props.repos, value.branch);
 	}
 
 	render() {
@@ -56,9 +56,7 @@ function validate(values) {
 function mapStateToProps(state) {
 	return {
 		repos: state.repos,
-		selectedRepo: state.selectedRepo,
-		branches: state.branches,
-		auth: state.auth
+		branches: state.branches
 	}
 }
 

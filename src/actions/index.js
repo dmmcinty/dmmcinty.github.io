@@ -18,10 +18,10 @@ export function gitAuth(credentials) {
 
 	const request = octokit.users.get({})
 	.then(response => {
-		return credentials.password;
+		return true;
 	})
 	.catch(error => {
-		return null;
+		return false;
 	});
 
 	return {
@@ -30,12 +30,7 @@ export function gitAuth(credentials) {
 	}
 }
 
-export function fetchRepos(credentials, page) {
-	octokit.authenticate({
-		type: 'oauth',
-		token: credentials
-	});
-
+export function fetchRepos(page) {
 	const request = octokit.repos.getAll({
 		visibility: 'private',
 		affiliation: 'organization_member',
@@ -56,12 +51,7 @@ export function fetchRepos(credentials, page) {
 	}
 }
 
-export function fetchBranches(credentials, value, page) {
-	octokit.authenticate({
-		type: 'oauth',
-		token: credentials
-	});
-
+export function fetchBranches(value, page) {
 	const request = octokit.repos.getBranches({
 		owner: 'synapsestudios',
 		repo: value,
@@ -81,12 +71,7 @@ export function fetchBranches(credentials, value, page) {
 	}
 }
 
-export function fetchLogs(credentials, repo, branch, page) {
-	octokit.authenticate({
-		type: 'oauth',
-		token: credentials
-	});
-
+export function fetchLogs(repo, branch, page) {
 	const request = octokit.pullRequests.getAll(
 	{
 		owner: 'synapsestudios',
@@ -116,73 +101,3 @@ export function selectRepo(repo) {
 		payload: repo
 	}
 }
-
-// export function fetchLogs() {
-// 	const request = octokit.pullRequests.getAll(
-// 	{
-// 		owner: 'synapsestudios',
-// 		repo: 'silver-sneakers',
-// 		state: 'closed',
-// 		base: 'release/v0.2.0',
-// 		per_page: 100,
-// 		direction: 'asc'
-// 	})
-// 	.then(response => {
-// 		return response;
-// 	})
-// 	.catch(error => {
-// 		console.log(error);
-// 	});
-
-// 	return {
-// 		type: FETCH_LOGS,
-// 		payload: request
-// 	}
-// }
-
-// export function fetchLogs(page) {
-// 	const request = axios.get('https://api.github.com/repos/synapsestudios/silver-sneakers/pulls', {
-// 		params: {
-// 			access_token: gitKey,
-// 			state: 'closed',
-// 			base: 'release/v0.2.0',
-// 			page: page,
-// 			per_page: 100,
-// 			sort: 'asc'
-// 		}
-// 	})
-// 	.then(function(response) {
-// 		return response;
-// 	})
-// 	.catch(function(error) {
-// 		console.log(error);
-// 	});
-
-// 	return {
-// 		type: FETCH_LOGS,
-// 		payload: request
-// 	}
-// }
-
-// export function gitAuth() {
-// 	const request = axios.get('https://github.com/login/oauth/authorize', {
-// 		headers: {
-// 			accept: 'application/vnd.github.machine-man-preview+json'
-// 		},
-// 		params: {
-// 			client_id: clientID
-// 		}
-// 	})
-// 	.then(function(response) {
-// 		console.log(response);
-// 		return response;
-// 	})
-// 	.catch(function(error) {
-// 		console.log(error);
-// 	});
-
-// 	return {
-// 		type: GIT_AUTH,
-// 		payload: request
-// 	}
-// }

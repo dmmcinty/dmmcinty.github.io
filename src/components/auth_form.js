@@ -56,50 +56,9 @@ function validate(values) {
 	return errors;
 }
 
-function mapStateToProps(state) {
-	return {
-		auth: state.auth
-	}
-}
-
 export default reduxForm({
   validate,
   form: 'AuthForm'
 })(
-    connect(mapStateToProps, { gitAuth })(AuthForm)
+    connect(null, { gitAuth })(AuthForm)
   );
-
-
-// const authLink = `https://github.com/login/oauth/authorize?client_id=${process.env.CLIENT_ID}`;
-
-
-// class AuthButtons extends Component {
-// 	gitLogin() {
-// 		console.log('cool');
-// 		let username = document.getElementById("username").value;
-// 		let password = document.getElementById("password").value;
-// 		this.props.gitAuth(username, password);
-// 	}
-
-// 	render() {
-// 		return(
-// 			<form>
-// 				<div className="form-group">
-// 					<input id="username" className="form-control" placeholder="Username" type="text"></input>
-// 					<input id="password" className="form-control" placeholder="Password" type="password"></input>
-// 				</div>
-// 				<button className="btn btn-primary" onClick={this.gitLogin}>
-// 					Do auth stuff
-// 				</button>
-// 			</form>
-// 		);
-// 	}
-// }
-
-// function mapStateToProps(state) {
-// 	return {
-// 		auth: state.auth
-// 	}
-// }
-
-// export default connect(mapStateToProps, {gitAuth})(AuthButtons);
