@@ -16,7 +16,7 @@ class ChangelogList extends Component {
 						<a href={log.html_url} target="_blank">{logItem}</a>
 					</td>
 					<td>
-						<CategorySelect onChange={console.log('woop')}/>
+						<CategorySelect form={`CategorySelect_${log.id}`} />
 					</td>
 				</tr>
 			)
