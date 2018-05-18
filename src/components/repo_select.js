@@ -6,7 +6,7 @@ import _ from 'lodash';
 
 class RepoSelect extends Component {
 	componentDidMount() {
-			this.props.fetchRepos();
+		this.props.fetchRepos();
 	}
 
 	renderOptions() {
@@ -16,8 +16,9 @@ class RepoSelect extends Component {
 				return (
 					<option 
 						value={repo.name} 
-						key={repo.id}>
-							{repo.name}
+						key={repo.id}
+					>
+						{repo.name}
 					</option>
 				);
 			});
@@ -54,12 +55,6 @@ class RepoSelect extends Component {
 	}
 }
 
-function validate(values) {
-	const errors = {};
-
-	return errors;
-}
-
 function mapStateToProps(state) {
 	return {
 		repos: state.repos
@@ -67,7 +62,6 @@ function mapStateToProps(state) {
 }
 
 export default reduxForm({
-  validate,
   form: 'RepoSelect'
 })(
     connect(mapStateToProps, { fetchRepos, fetchBranches, selectRepo })(RepoSelect)
