@@ -34,7 +34,7 @@ class RepoSelect extends Component {
 		const { handleSubmit } = this.props;
 
 		return (
-			<form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+			<form onSubmit={ handleSubmit(this.onSubmit.bind(this)) }>
 				<div className="form-group">
 					<label>Repo</label>
 					<div>

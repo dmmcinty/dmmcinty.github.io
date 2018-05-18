@@ -1,4 +1,5 @@
 export const FETCH_LOGS = 'fetch_logs';
+export const CATEGORIZE_LOG = 'categorize_log';
 export const GIT_AUTH = 'git_auth';
 export const FETCH_REPOS = 'fetch_repos';
 export const FETCH_BRANCHES = 'fetch_branches';
@@ -51,6 +52,13 @@ export function fetchRepos(page) {
 	}
 }
 
+export function selectRepo(repo) {
+	return {
+		type: SELECT_REPO,
+		payload: repo
+	}
+}
+
 export function fetchBranches(value, page) {
 	const request = octokit.repos.getBranches({
 		owner: 'synapsestudios',
@@ -95,9 +103,12 @@ export function fetchLogs(repo, branch, page) {
 	}
 }
 
-export function selectRepo(repo) {
+export function categorizeLog(log, category) {
+	log.category = category;
+	let result = log;
+
 	return {
-		type: SELECT_REPO,
-		payload: repo
+		type: CATEGORIZE_LOG,
+		payload: result
 	}
 }

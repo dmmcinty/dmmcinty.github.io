@@ -4,6 +4,7 @@ import AuthForm from './auth_form';
 import RepoSelect from './repo_select';
 import BranchSelect from './branch_select';
 import CategorySelect from './category_select';
+import { categorizeLog } from '../actions';
 import _ from 'lodash';
 
 class ChangelogList extends Component {
@@ -18,7 +19,7 @@ class ChangelogList extends Component {
 					<td>
 						<CategorySelect 
 							form={`CategorySelect_${log.id}`} 
-							onChange={ values => console.log(values) }
+							onChange={ value => this.props.categorizeLog(log, value.category) }
 						/>
 					</td>
 				</tr>
@@ -69,4 +70,4 @@ function mapStateToProps(state) {
 	}
 }
 
-export default connect(mapStateToProps, null)(ChangelogList);
+export default connect(mapStateToProps, {categorizeLog})(ChangelogList);

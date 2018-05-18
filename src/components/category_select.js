@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
+import { categorizeLog } from '../actions';
 
 let CategorySelect = props => {
 	const {
