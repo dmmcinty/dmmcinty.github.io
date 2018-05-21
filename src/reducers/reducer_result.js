@@ -24,8 +24,7 @@ export default function(state = '', action) {
 					fixed += '\n' + logItem;
 				}
 			});
-			result += added + '\n' + removed + '\n' + changed + '\n' + fixed + '\n';
-			console.log(result);
+			result += added + '\n\n' + changed + '\n\n' + removed + '\n\n' + fixed + '\n\n\n';
 			return result;
 		default:
 			return state;
