@@ -4,6 +4,7 @@ import AuthForm from './auth_form';
 import RepoSelect from './repo_select';
 import BranchSelect from './branch_select';
 import CategorySelect from './category_select';
+import CreateResultButton from './create_result';
 import { categorizeLog } from '../actions';
 import _ from 'lodash';
 
@@ -34,6 +35,7 @@ class ChangelogList extends Component {
 			<div>
 				<RepoSelect />
 				<BranchSelect />
+				<CreateResultButton />
 			</div>
 		);
 	}

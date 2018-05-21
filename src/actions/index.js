@@ -2,14 +2,16 @@ export const FETCH_LOGS = 'fetch_logs';
 export const CATEGORIZE_LOG = 'categorize_log';
 export const GIT_AUTH = 'git_auth';
 export const FETCH_REPOS = 'fetch_repos';
-export const FETCH_BRANCHES = 'fetch_branches';
 export const SELECT_REPO = 'select_repo';
+export const FETCH_BRANCHES = 'fetch_branches';
+export const CREATE_RESULT = 'create_result';
 
 const octokit = require('@octokit/rest')();
 
 const gitKey = process.env.GITKEY;
 const clientID = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
+
 
 export function gitAuth(credentials) {
 	octokit.authenticate({
@@ -91,6 +93,9 @@ export function fetchLogs(repo, branch, page) {
 		direction: 'asc'
 	})
 	.then(response => {
+		if (octokit.hasNextPage(response)) {
+			octokit.getNextPage(response);
+		}
 		return response;
 	})
 	.catch(error => {
@@ -110,5 +115,12 @@ export function categorizeLog(log, category) {
 	return {
 		type: CATEGORIZE_LOG,
 		payload: result
+	}
+}
+
+export function createResult(logs) {
+	return {
+		type: 	CREATE_RESULT,
+		payload: logs
 	}
 }
