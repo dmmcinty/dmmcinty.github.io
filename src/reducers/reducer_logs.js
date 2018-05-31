@@ -1,12 +1,11 @@
 import { FETCH_LOGS, CATEGORIZE_LOG } from '../actions';
-import _ from 'lodash';
 
-export default function(state = {}, action) {
+export default function(state = null, action) {
 	switch (action.type) {
 		case FETCH_LOGS:
 			return action.payload;
 		case CATEGORIZE_LOG:
-			_.map(state.data, log => {
+			state.map(log => {
 				if(log.id == action.payload.id) {
 					log = action.payload;
 				} 

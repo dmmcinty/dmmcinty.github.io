@@ -12,6 +12,15 @@ const gitKey = process.env.GITKEY;
 const clientID = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 
+async function paginate (method, params) {
+	let response = await method(params);
+	let {data} = response;
+	while (octokit.hasNextPage(response)) {
+		response = await octokit.getNextPage(response);
+		data = data.concat(response.data);
+	}
+	return data;
+}
 
 export function gitAuth(credentials) {
 	octokit.authenticate({
@@ -82,8 +91,7 @@ export function fetchBranches(value, page) {
 }
 
 export function fetchLogs(repo, branch, page) {
-	const request = octokit.pullRequests.getAll(
-	{
+	const params = {
 		owner: 'synapsestudios',
 		repo: repo,
 		state: 'closed',
@@ -91,17 +99,14 @@ export function fetchLogs(repo, branch, page) {
 		per_page: 100,
 		page: page,
 		direction: 'asc'
-	})
+	};
+	const request = paginate(octokit.pullRequests.getAll, params)
 	.then(response => {
-		if (octokit.hasNextPage(response)) {
-			octokit.getNextPage(response);
-		}
 		return response;
 	})
 	.catch(error => {
 		console.log(error);
 	});
-
 	return {
 		type: FETCH_LOGS,
 		payload: request

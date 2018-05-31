@@ -6,26 +6,35 @@ import BranchSelect from './branch_select';
 import CategorySelect from './category_select';
 import CreateResultButton from './create_result';
 import { categorizeLog } from '../actions';
-import _ from 'lodash';
 
 class ChangelogList extends Component {
 	renderLogs() {
-		return _.map(this.props.logs.data, log => {
-			const logItem = `- [#${log.number}](${log.html_url}) ${log.title}.`;
-			return (
-				<tr key={log.id}>
-					<td>
-						<a href={log.html_url} target="_blank">{logItem}</a>
-					</td>
-					<td>
-						<CategorySelect 
-							form={`CategorySelect_${log.id}`} 
-							onChange={ value => this.props.categorizeLog(log, value.category) }
-						/>
-					</td>
-				</tr>
-			)
-		});
+		let logs = this.props.logs;
+		if(logs) {
+			return logs.map(log => {
+				const logItem = `- [#${log.number}](${log.html_url}) ${log.title}.`;
+				return (
+					<tr key={log.id}>
+						<td>
+							<a href={log.html_url} target="_blank">{logItem}</a>
+						</td>
+						<td>
+							<CategorySelect 
+								form={`CategorySelect_${log.id}`} 
+								onChange={ value => this.props.categorizeLog(log, value.category) }
+							/>
+						</td>
+					</tr>
+				)
+			});
+		} else return (
+			<tr>
+				<td>
+					Select a repo to get logs
+				</td>
+			</tr>
+		);
+
 	}
 
 	checkAuth() {
