@@ -2,24 +2,29 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { fetchLogs } from '../actions';
-import _ from 'lodash';
 
 class BranchSelect extends Component {
 	renderOptions() {
-		return _.map(this.props.branches, branch => {
-			return (
-				<option 
-					value={branch.name} 
-					key={branch.name}
-				>
-					{branch.name}
-				</option>
-			);
-		});
+		let branches = this.props.branches;
+		if(branches) {
+			return this.props.branches.map(branch => {
+				return (
+					<option 
+						value={branch.name} 
+						key={branch.name}
+					>
+						{branch.name}
+					</option>
+				);
+			});
+		}
 	}
 
 	onSubmit(value) {
-		this.props.fetchLogs(this.props.repos, value.branch);
+		let repo = this.props.repos.find(repo => {
+			return repo.selected == true;
+		});
+		this.props.fetchLogs(repo.name, value.branch);
 	}
 
 	render() {

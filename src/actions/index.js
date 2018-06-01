@@ -115,11 +115,10 @@ export function fetchLogs(repo, branch, page) {
 
 export function categorizeLog(log, category) {
 	log.category = category;
-	let result = log;
 
 	return {
 		type: CATEGORIZE_LOG,
-		payload: result
+		payload: log
 	}
 }
 

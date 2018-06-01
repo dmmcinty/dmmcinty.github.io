@@ -1,5 +1,4 @@
 import { CREATE_RESULT } from '../actions';
-import _ from 'lodash';
 
 export default function(state = '', action) {
 	switch (action.type) {
@@ -9,22 +8,36 @@ export default function(state = '', action) {
 			let changed = '### Changed';
 			let removed = '### Removed';
 			let fixed = '### Fixed';
-			_.map(action.payload.data, log => {
+			action.payload.map(log => {
 				const logItem = `- [#${log.number}](${log.html_url}) ${log.title}.`;
 				if(log.category == 'Added') {
 					added += '\n' + logItem;
-				}
-				if(log.category == 'Changed') {
+				} else if (log.category == 'Changed') {
 					changed += '\n' + logItem;
-				}
-				if(log.category == 'Removed') {
+				} else if(log.category == 'Removed') {
 					removed += '\n' + logItem;
-				}
-				if(log.category == 'Fixed') {
+				} else if(log.category == 'Fixed') {
 					fixed += '\n' + logItem;
 				}
 			});
-			result += added + '\n\n' + changed + '\n\n' + removed + '\n\n' + fixed + '\n\n\n';
+
+			if(added == '### Added') {
+				added = '';
+			} else added += '\n\n';
+
+			if(changed == '### Changed') {
+				changed = '';
+			} else changed += '\n\n';
+
+			if(removed == '### Removed') {
+				removed = '';
+			} else removed += '\n\n';
+
+			if(fixed == '### Fixed') {
+				fixed = '';
+			} else fixed += '\n\n';
+
+			result += added + changed + removed + fixed + '\n';
 			return result;
 		default:
 			return state;

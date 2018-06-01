@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { fetchRepos, fetchBranches, selectRepo } from '../actions';
-import _ from 'lodash';
 
 class RepoSelect extends Component {
 	componentDidMount() {
@@ -10,9 +9,9 @@ class RepoSelect extends Component {
 	}
 
 	renderOptions() {
-		if (typeof this.props.repos != 'string') {
-			const options = this.props.repos;
-			return _.map(options, repo => {
+		let options = this.props.repos;
+		if (options) {
+			return options.map(repo => {
 				return (
 					<option 
 						value={repo.name} 
@@ -22,7 +21,11 @@ class RepoSelect extends Component {
 					</option>
 				);
 			});
-		}
+		} else return (
+			<option value = {options}>
+				{options}
+			</option>
+		)
 	}
 
 	onSubmit(value) {
