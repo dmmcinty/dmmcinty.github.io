@@ -5,6 +5,10 @@ export const FETCH_REPOS = 'fetch_repos';
 export const SELECT_REPO = 'select_repo';
 export const FETCH_BRANCHES = 'fetch_branches';
 export const CREATE_RESULT = 'create_result';
+export const FETCH_PROJECTS = 'fetch_projects';
+export const SELECT_PROJECT = 'select_project';
+// export const GET_DONE_COLUMN = 'get_done_column';
+export const FETCH_ISSUES = 'fetch_issues';
 
 const octokit = require('../@octokit/rest')();
 
@@ -50,7 +54,7 @@ export function fetchRepos(page) {
 		return response;
 	})
 	.catch(error => {
-		console.log(error);
+		console.error(error);
 	});
 
 	return {
@@ -77,7 +81,7 @@ export function fetchBranches(value, page) {
 		return response;
 	})
 	.catch(error => {
-		console.log(error);
+		console.error(error);
 	});
 
 	return {
@@ -101,13 +105,85 @@ export function fetchLogs(repo, branch, page) {
 		return response;
 	})
 	.catch(error => {
-		console.log(error);
+		console.error(error);
 	});
 	return {
 		type: FETCH_LOGS,
 		payload: request
 	}
 }
+
+export function fetchProjects() {
+	const params = {
+		org: 'synapsestudios',
+		per_page: 100,
+	};
+	const request = paginate(octokit.projects.getOrgProjects, params)
+	.then(response => {
+		return response;
+	})
+	.catch(error => {
+		console.error(error);
+	});
+	return {
+		type: FETCH_PROJECTS,
+		payload: request
+	}
+}
+
+export function selectProject(project) {
+	return {
+		type: SELECT_PROJECT,
+		payload: project
+	}
+}
+
+export function fetchIssues(repo, project_id) {
+	const query = `type:issue+state:closed+project:${repo}/${project_id}`
+	const params = {
+		query,
+		sort: "created",
+		order: "asc",
+		per_page: 100
+	};
+	const request = paginate(octokit.search.issues, params)
+	.then(response => {
+		return response;
+	})
+	.catch(error => {
+		console.error(error);
+	});
+	return {
+		type: FETCH_ISSUES,
+		payload: request
+	}
+}
+
+// export function getDoneColumn(project_id) {
+// 	const params = {
+// 		project_id,
+// 		per_page: 100
+// 	};
+// 	const request = octokit.projects.getProjectColumns(params)
+// 	.then(response => {
+// 		return response;
+// 	})
+// 	.catch(error => {
+// 		console.error(error);
+// 	});
+// 	request.forEach(column => {
+// 		let currentName = column.name.trim( column.name.toLowerCase() );
+// 		if(currentName == 'done') {
+// 			return {
+// 				type: GET_DONE_COLUMN,
+// 				payload: column.id
+// 			}
+// 		} else {
+// 			console.error("No done column found");
+// 		}
+// 	});
+
+// }
 
 export function categorizeLog(log, category) {
 	log.category = category;
