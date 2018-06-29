@@ -6,11 +6,7 @@ export const SELECT_REPO = 'select_repo';
 export const FETCH_BRANCHES = 'fetch_branches';
 export const CREATE_RESULT = 'create_result';
 
-const octokit = require('@octokit/rest')();
-
-const gitKey = process.env.GITKEY;
-const clientID = process.env.CLIENT_ID;
-const clientSecret = process.env.CLIENT_SECRET;
+const octokit = require('../@octokit/rest')();
 
 async function paginate (method, params) {
 	let response = await method(params);
