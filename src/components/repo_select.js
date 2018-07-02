@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
-import { fetchRepos, fetchBranches, selectRepo } from '../actions';
+import { fetchRepos, fetchBranches, fetchProjects, selectRepo } from '../actions';
 
 class RepoSelect extends Component {
 	componentDidMount() {
@@ -31,6 +31,7 @@ class RepoSelect extends Component {
 	onSubmit(value) {
 		this.props.selectRepo(value.repo);
 		this.props.fetchBranches(value.repo);
+		this.props.fetchProjects(value.repo);
 	}
 
 	render() {
@@ -67,5 +68,5 @@ function mapStateToProps(state) {
 export default reduxForm({
   form: 'RepoSelect'
 })(
-    connect(mapStateToProps, { fetchRepos, fetchBranches, selectRepo })(RepoSelect)
+    connect(mapStateToProps, { fetchRepos, fetchBranches, fetchProjects, selectRepo })(RepoSelect)
   );

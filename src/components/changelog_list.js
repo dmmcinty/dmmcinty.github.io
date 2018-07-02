@@ -4,6 +4,7 @@ import AuthForm from './auth_form';
 import RepoSelect from './repo_select';
 import BranchSelect from './branch_select';
 import CategorySelect from './category_select';
+import ProjectSelect from './project_select';
 import CreateResultButton from './create_result';
 import { categorizeLog } from '../actions';
 
@@ -30,7 +31,7 @@ class ChangelogList extends Component {
 		} else return (
 			<tr>
 				<td>
-					Select a repo to get logs
+					Select a repo or project to get logs
 				</td>
 			</tr>
 		);
@@ -44,6 +45,10 @@ class ChangelogList extends Component {
 			<div>
 				<RepoSelect />
 				<BranchSelect />
+				<h3>
+					OR
+				</h3>	
+				<ProjectSelect />
 				<CreateResultButton />
 			</div>
 		);
