@@ -15,11 +15,17 @@ const octokit = require('../@octokit/rest')();
 async function paginate (method, params) {
 	let response = await method(params);
 	let {data} = response;
+	let {items} = data;
 	while (octokit.hasNextPage(response)) {
-		response = await octokit.getNextPage(response);
-		data = data.concat(response.data);
+		if(items) {
+			response = await octokit.getNextPage(response, params.headers);
+			items = items.concat(response.data.items);
+		} else {
+			response = await octokit.getNextPage(response, params.headers);
+			data = data.concat(response.data);			
+		}
 	}
-	return data;
+	return items ? items : data;
 }
 
 export function gitAuth(credentials) {
@@ -70,10 +76,10 @@ export function selectRepo(repo) {
 	}
 }
 
-export function fetchBranches(value, page) {
+export function fetchBranches(repo, page) {
 	const request = octokit.repos.getBranches({
 		owner: 'synapsestudios',
-		repo: value,
+		repo,
 		per_page: 100,
 		page: page
 	})
@@ -113,12 +119,17 @@ export function fetchLogs(repo, branch, page) {
 	}
 }
 
-export function fetchProjects() {
+export function fetchProjects(repo) {
 	const params = {
-		org: 'synapsestudios',
+		owner: 'synapsestudios',
+		repo,
+		state: 'all',
 		per_page: 100,
+		headers: {
+			accept: 'application/vnd.github.inertia-preview+json'
+		}
 	};
-	const request = paginate(octokit.projects.getOrgProjects, params)
+	const request = paginate(octokit.projects.getRepoProjects, params)
 	.then(response => {
 		return response;
 	})
@@ -138,16 +149,17 @@ export function selectProject(project) {
 	}
 }
 
-export function fetchIssues(repo, project_id) {
-	const query = `type:issue+state:closed+project:${repo}/${project_id}`
+export function fetchIssues(repo, project_num) {
+	const q = `type:issue+state:closed+project:synapsestudios/${repo}/${project_num}`;
 	const params = {
-		query,
+		q,
 		sort: "created",
 		order: "asc",
 		per_page: 100
 	};
 	const request = paginate(octokit.search.issues, params)
 	.then(response => {
+		console.log(response);
 		return response;
 	})
 	.catch(error => {
