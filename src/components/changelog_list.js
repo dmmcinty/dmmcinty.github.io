@@ -13,13 +13,13 @@ class ChangelogList extends Component {
 		let result;
 		label.forEach(label => {
 			if(label.name === 'bug') {
-				result = {category: "Fixed"};
+				result = "Fixed";
 			}
 			if(label.name === 'enhancement') {
-				result = {category: "Changed"};
+				result = "Changed";
 			}
 			if(label.name === 'feature') {
-				result = {category: "Added"};
+				result = "Added";
 			}
 		});
 		return result;
@@ -29,6 +29,10 @@ class ChangelogList extends Component {
 		let logs = this.props.logs;
 		if(logs) {
 			return logs.map(log => {
+				if(log.labels) {
+					this.props.categorizeLog(log, this.autoCategorize(log.labels));
+				}
+
 				const logItem = `- [#${log.number}](${log.html_url}) ${log.title}.`;
 				return (
 					<tr key={log.id}>
@@ -39,7 +43,7 @@ class ChangelogList extends Component {
 							<CategorySelect 
 								form={`CategorySelect_${log.id}`} 
 								onChange={ value => this.props.categorizeLog(log, value.category) }
-								initialValues={this.autoCategorize(log.labels)}
+								initialValues={{category: this.autoCategorize(log.labels)}}
 							/>
 						</td>
 					</tr>
