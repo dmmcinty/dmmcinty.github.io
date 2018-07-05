@@ -9,6 +9,22 @@ import CreateResultButton from './create_result';
 import { categorizeLog } from '../actions';
 
 class ChangelogList extends Component {
+	autoCategorize(label) {
+		let result;
+		label.forEach(label => {
+			if(label.name === 'bug') {
+				result = {category: "Fixed"};
+			}
+			if(label.name === 'enhancement') {
+				result = {category: "Changed"};
+			}
+			if(label.name === 'feature') {
+				result = {category: "Added"};
+			}
+		});
+		return result;
+	}
+
 	renderLogs() {
 		let logs = this.props.logs;
 		if(logs) {
@@ -23,6 +39,7 @@ class ChangelogList extends Component {
 							<CategorySelect 
 								form={`CategorySelect_${log.id}`} 
 								onChange={ value => this.props.categorizeLog(log, value.category) }
+								initialValues={this.autoCategorize(log.labels)}
 							/>
 						</td>
 					</tr>

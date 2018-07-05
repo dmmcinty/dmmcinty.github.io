@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm, formValueSelector } from 'redux-form';
-import { categorizeLog } from '../actions';
+import { Field, reduxForm } from 'redux-form';
 
 let CategorySelect = props => {
-	const {
-		categoryValue
-	} = props;
-
 	return(
 		<Field
 			name="category"
@@ -20,20 +15,13 @@ let CategorySelect = props => {
 			<option>Fixed</option>
 		</Field>
 	);
-	
 }
 
 CategorySelect = reduxForm({
-	form: 'CategorySelect'
+	form: 'CategorySelect',
+	enableReinitialize : true
 })(CategorySelect);
 
-const selector = formValueSelector('CategorySelect');
-
-CategorySelect = connect(state => {
-	const categoryValue = selector(state, 'category');
-	return {
-		categoryValue
-	}
-})(CategorySelect);
+CategorySelect = connect()(CategorySelect);
 
 export default CategorySelect;

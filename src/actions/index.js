@@ -7,7 +7,6 @@ export const FETCH_BRANCHES = 'fetch_branches';
 export const CREATE_RESULT = 'create_result';
 export const FETCH_PROJECTS = 'fetch_projects';
 export const SELECT_PROJECT = 'select_project';
-// export const GET_DONE_COLUMN = 'get_done_column';
 export const FETCH_ISSUES = 'fetch_issues';
 
 const octokit = require('../@octokit/rest')();
@@ -159,7 +158,6 @@ export function fetchIssues(repo, project_num) {
 	};
 	const request = paginate(octokit.search.issues, params)
 	.then(response => {
-		console.log(response);
 		return response;
 	})
 	.catch(error => {
@@ -170,32 +168,6 @@ export function fetchIssues(repo, project_num) {
 		payload: request
 	}
 }
-
-// export function getDoneColumn(project_id) {
-// 	const params = {
-// 		project_id,
-// 		per_page: 100
-// 	};
-// 	const request = octokit.projects.getProjectColumns(params)
-// 	.then(response => {
-// 		return response;
-// 	})
-// 	.catch(error => {
-// 		console.error(error);
-// 	});
-// 	request.forEach(column => {
-// 		let currentName = column.name.trim( column.name.toLowerCase() );
-// 		if(currentName == 'done') {
-// 			return {
-// 				type: GET_DONE_COLUMN,
-// 				payload: column.id
-// 			}
-// 		} else {
-// 			console.error("No done column found");
-// 		}
-// 	});
-
-// }
 
 export function categorizeLog(log, category) {
 	log.category = category;
