@@ -10,30 +10,30 @@ export default function(state = '', action) {
 			let fixed = '### Fixed';
 			action.payload.map(log => {
 				const logItem = `- [#${log.number}](${log.html_url}) ${log.title}.`;
-				if(log.category == 'Added') {
+				if(log.category === 'Added') {
 					added += '\n' + logItem;
-				} else if (log.category == 'Changed') {
+				} else if (log.category === 'Changed') {
 					changed += '\n' + logItem;
-				} else if(log.category == 'Removed') {
+				} else if(log.category === 'Removed') {
 					removed += '\n' + logItem;
-				} else if(log.category == 'Fixed') {
+				} else if(log.category === 'Fixed') {
 					fixed += '\n' + logItem;
 				}
 			});
 
-			if(added == '### Added') {
+			if(added === '### Added') {
 				added = '';
 			} else added += '\n\n';
 
-			if(changed == '### Changed') {
+			if(changed === '### Changed') {
 				changed = '';
 			} else changed += '\n\n';
 
-			if(removed == '### Removed') {
+			if(removed === '### Removed') {
 				removed = '';
 			} else removed += '\n\n';
 
-			if(fixed == '### Fixed') {
+			if(fixed === '### Fixed') {
 				fixed = '';
 			} else fixed += '\n\n';
 

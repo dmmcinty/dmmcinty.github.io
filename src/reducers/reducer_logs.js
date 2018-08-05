@@ -1,9 +1,7 @@
-import { FETCH_LOGS, FETCH_ISSUES, CATEGORIZE_LOG } from '../actions';
+import { FETCH_ISSUES, CATEGORIZE_LOG } from '../actions';
 
 export default function(state = null, action) {
 	switch (action.type) {
-		case FETCH_LOGS:
-			return action.payload;
 		case FETCH_ISSUES:
 			return action.payload;
 		case CATEGORIZE_LOG:
