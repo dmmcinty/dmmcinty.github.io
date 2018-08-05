@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AuthForm from './auth_form';
 import RepoSelect from './repo_select';
-import BranchSelect from './branch_select';
 import CategorySelect from './category_select';
 import ProjectSelect from './project_select';
 import CreateResultButton from './create_result';
-import { categorizeLog } from '../actions';
+import { categorizeLog, selectRepo, fetchProjects, fetchIssues, selectProject } from '../actions';
 
 class ChangelogList extends Component {
 	autoCategorize(label) {
@@ -25,6 +24,29 @@ class ChangelogList extends Component {
 		return result;
 	}
 
+	repoSelected(repo) {
+		this.props.selectRepo(repo);
+		this.props.fetchProjects(repo);
+	}
+
+	isRepoSelected() {
+		if(this.props.repos) {
+			let repo = this.props.repos.find(repo => {
+				return repo.selected == true;
+			});
+			return repo;
+		}
+	}
+
+	projectSelected(project) {
+		let repo = this.isRepoSelected();
+		this.props.selectProject(project);
+		let selected = this.props.projects.find(project => {
+			return project.selected == true;
+		});
+		this.props.fetchIssues(repo.name, selected.number);
+	}
+
 	renderLogs() {
 		let logs = this.props.logs;
 		if(logs) {
@@ -33,7 +55,7 @@ class ChangelogList extends Component {
 					this.props.categorizeLog(log, this.autoCategorize(log.labels));
 				}
 
-				const logItem = `- [#${log.number}](${log.html_url}) ${log.title}.`;
+				const logItem = `- [#${log.number}](${log.html_url}) ${log.title.trim()}.`;
 				return (
 					<tr key={log.id}>
 						<td>
@@ -43,7 +65,7 @@ class ChangelogList extends Component {
 							<CategorySelect 
 								form={`CategorySelect_${log.id}`} 
 								onChange={ value => this.props.categorizeLog(log, value.category) }
-								initialValues={{category: this.autoCategorize(log.labels)}}
+								initialValues={ {category: this.autoCategorize(log.labels)} }
 							/>
 						</td>
 					</tr>
@@ -52,7 +74,7 @@ class ChangelogList extends Component {
 		} else return (
 			<tr>
 				<td>
-					Select a repo or project to get logs
+					Select a project to get logs
 				</td>
 			</tr>
 		);
@@ -64,15 +86,29 @@ class ChangelogList extends Component {
 			return <AuthForm />;
 		} else return (
 			<div>
-				<RepoSelect />
-				<BranchSelect />
-				<h3>
-					OR
-				</h3>	
-				<ProjectSelect />
-				<CreateResultButton />
+				<RepoSelect onChange={ value => this.repoSelected(value.repo) } />
 			</div>
 		);
+	}
+
+	checkRepos() {
+		if(this.isRepoSelected()) {
+			return (
+				<div>
+					<ProjectSelect onChange={ value => this.projectSelected(value.project) } />
+				</div>
+			);
+		}
+	}
+
+	checkProjects() {
+		if(this.props.projects) {
+			return (
+				<div>
+					<CreateResultButton />
+				</div>
+			)
+		}
 	}
 
 	render(){
@@ -80,6 +116,8 @@ class ChangelogList extends Component {
 			<div>
 				<h3>List o' Logs</h3>
 				{this.checkAuth()}
+				{this.checkRepos()}
+				{this.checkProjects()}
 				<table className="table">
 					<thead>
 						<tr>
@@ -103,8 +141,10 @@ class ChangelogList extends Component {
 function mapStateToProps(state) {
 	return {
 		logs: state.logs,
-		auth: state.auth
+		auth: state.auth,
+		repos: state.repos,
+		projects: state.projects
 	}
 }
 
-export default connect(mapStateToProps, {categorizeLog})(ChangelogList);
+export default connect(mapStateToProps, { categorizeLog, selectRepo, fetchProjects, fetchIssues, selectProject })(ChangelogList);

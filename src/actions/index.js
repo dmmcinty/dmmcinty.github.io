@@ -3,7 +3,6 @@ export const CATEGORIZE_LOG = 'categorize_log';
 export const GIT_AUTH = 'git_auth';
 export const FETCH_REPOS = 'fetch_repos';
 export const SELECT_REPO = 'select_repo';
-export const FETCH_BRANCHES = 'fetch_branches';
 export const CREATE_RESULT = 'create_result';
 export const FETCH_PROJECTS = 'fetch_projects';
 export const SELECT_PROJECT = 'select_project';
@@ -72,49 +71,6 @@ export function selectRepo(repo) {
 	return {
 		type: SELECT_REPO,
 		payload: repo
-	}
-}
-
-export function fetchBranches(repo, page) {
-	const request = octokit.repos.getBranches({
-		owner: 'synapsestudios',
-		repo,
-		per_page: 100,
-		page: page
-	})
-	.then(response => {
-		return response;
-	})
-	.catch(error => {
-		console.error(error);
-	});
-
-	return {
-		type: FETCH_BRANCHES,
-		payload: request
-	}
-}
-
-export function fetchLogs(repo, branch, page) {
-	const params = {
-		owner: 'synapsestudios',
-		repo: repo,
-		state: 'closed',
-		base: branch,
-		per_page: 100,
-		page: page,
-		direction: 'asc'
-	};
-	const request = paginate(octokit.pullRequests.getAll, params)
-	.then(response => {
-		return response;
-	})
-	.catch(error => {
-		console.error(error);
-	});
-	return {
-		type: FETCH_LOGS,
-		payload: request
 	}
 }
 
